@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema APP LG - Documentação Navegável</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-left: 5px solid #667eea;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .nav-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .nav-tab {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .nav-tab:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .content-section {
+            display: none;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        .module-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-left: 6px solid #667eea;
+        }
+
+        .module-header {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .module-header:hover {
+            background: linear-gradient(45deg, #764ba2, #667eea);
+        }
+
+        .module-header h3 {
+            font-size: 1.8em;
+            margin-bottom: 8px;
+        }
+
+        .module-description {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .module-content {
+            padding: 30px;
+            display: none;
+        }
+
+        .module-content.active {
+            display: block;
+        }
+
+        .table-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .table-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .table-item:hover {
+            border-color: #667eea;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .table-name {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        .table-columns {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .schema-viewer {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .github-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .github-btn {
+            background: #24292e;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .github-btn:hover {
+            background: #0366d6;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9em;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin: 2px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-title {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .feature-desc {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs {
+                flex-direction: column;
+            }
+            
+            .nav-tab {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .table-list {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 Sistema APP LG</h1>
+            <p>Sistema Completo de Gestão para Academias e Negócios</p>
+            
+            <div class="stats">
+                <div class="stat-card">
+                    <span class="stat-number">48</span>
+                    <div class="stat-label">Tabelas no Banco</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">8</span>
+                    <div class="stat-label">Módulos Principais</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">566</span>
+                    <div class="stat-label">Campos/Colunas</div>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">100%</span>
+                    <div class="stat-label">Supabase Backend</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('overview')">📊 Visão Geral</button>
+            <button class="nav-tab" onclick="showSection('modules')">🏗️ Módulos</button>
+            <button class="nav-tab" onclick="showSection('database')">🗄️ Banco de Dados</button>
+            <button class="nav-tab" onclick="showSection('features')">⚡ Funcionalidades</button>
+            <button class="nav-tab" onclick="showSection('github')">🐙 GitHub</button>
+        </div>
+
+        <!-- Visão Geral -->
+        <div id="overview" class="content-section active">
+            <div class="schema-viewer">
+                <h2>📋 Informações do Sistema</h2>
+                <p><strong>🎯 Objetivo:</strong> Sistema completo de gestão para academias com controle de membros, vendas, financeiro e cashback.</p>
+                <p><strong>🛠️ Tecnologia:</strong> Next.js 14 + Supabase + TypeScript + Tailwind CSS</p>
+                <p><strong>🚀 Status:</strong> Desenvolvido e implantado com sucesso</p>
+                <p><strong>💾 Banco de Dados:</strong> PostgreSQL via Supabase com 48 tabelas estruturadas</p>
+                
+                <h3>🏗️ Arquitetura do Sistema</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-title">Frontend</div>
+                        <div class="feature-desc">React 18 + Next.js 14 com App Router, TypeScript e Tailwind CSS</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">Backend</div>
+                        <div class="feature-desc">Supabase com PostgreSQL, Auth, Storage e Edge Functions</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">Autenticação</div>
+                        <div class="feature-desc">Sistema RBAC completo com controle de permissões por módulo</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">Deployment</div>
+                        <div class="feature-desc">Vercel para frontend e Supabase para backend/database</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Módulos -->
+        <div id="modules" class="content-section">
+            <div class="module-card">
+                <div class="module-header" onclick="toggleModule('admin')">
+                    <h3>🏢 Administrativo</h3>
+                    <div class="module-description">Gestão de empresas, filiais, usuários e permissões</div>
+                </div>
+                <div class="module-content" id="admin">
+                    <div class="table-list">
+                        <div class="table-item">
+                            <div class="table-name">organizations</div>
+                            <div class="table-columns">Empresa matriz, configurações principais</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">units</div>
+                            <div class="table-columns">Filiais/unidades, endereços, capacidade</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">profiles</div>
+                            <div class="table-columns">Perfis de usuários, roles, permissões</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">user_roles</div>
+                            <div class="table-columns">Controle de acesso RBAC</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">audit_logs</div>
+                            <div class="table-columns">Log de auditoria, rastreamento</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-header" onclick="toggleModule('cadastros')">
+                    <h3>📋 Cadastros</h3>
+                    <div class="module-description">Gestão de pessoas físicas e jurídicas</div>
+                </div>
+                <div class="module-content" id="cadastros">
+                    <div class="table-list">
+                        <div class="table-item">
+                            <div class="table-name">people</div>
+                            <div class="table-columns">Pessoas físicas e jurídicas base</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">clients</div>
+                            <div class="table-columns">Clientes, planos, status de pagamento</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">suppliers</div>
+                            <div class="table-columns">Fornecedores, serviços, comissões</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">employees</div>
+                            <div class="table-columns">Funcionários, cargos, salários</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">companies</div>
+                            <div class="table-columns">Empresas parceiras</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-header" onclick="toggleModule('academias')">
+                    <h3>🏃‍♂️ Academias</h3>
+                    <div class="module-description">Gestão de academias parceiras e avaliações</div>
+                </div>
+                <div class="module-content" id="academias">
+                    <div class="table-list">
+                        <div class="table-item">
+                            <div class="table-name">gyms</div>
+                            <div class="table-columns">Academias parceiras, instalações</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">check_ins</div>
+                            <div class="table-columns">Check-ins dos clientes</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">physical_assessments</div>
+                            <div class="table-columns">Avaliações físicas</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">nutritional_assessments</div>
+                            <div class="table-columns">Avaliações nutricionais</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">pricing_rules</div>
+                            <div class="table-columns">Regras de precificação</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-header" onclick="toggleModule('membros')">
+                    <h3>👥 Membros</h3>
+                    <div class="module-description">Gestão de membros, assinaturas e check-ins</div>
+                </div>
+                <div class="module-content" id="membros">
+                    <div class="table-list">
+                        <div class="table-item">
+                            <div class="table-name">members</div>
+                            <div class="table-columns">Membros, planos, QR codes</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">memberships</div>
+                            <div class="table-columns">Assinaturas de membros</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">member_checkins</div>
+                            <div class="table-columns">Check-ins de membros</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">member_services</div>
+                            <div class="table-columns">Serviços contratados</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">wallet_tokens</div>
+                            <div class="table-columns">Tokens de acesso mobile</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-header" onclick="toggleModule('vendas')">
+                    <h3>💼 Vendas</h3>
+                    <div class="module-description">Gestão de vendas, propostas e planos</div>
+                </div>
+                <div class="module-content" id="vendas">
+                    <div class="table-list">
+                        <div class="table-item">
+                            <div class="table-name">sales</div>
+                            <div class="table-columns">Vendas realizadas</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">proposals</div>
+                            <div class="table-columns">Propostas comerciais</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">plans</div>
+                            <div class="table-columns">Planos disponíveis</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">products</div>
+                            <div class="table-columns">Produtos e serviços</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-header" onclick="toggleModule('financeiro')">
+                    <h3>💰 Financeiro</h3>
+                    <div class="module-description">Gestão financeira completa</div>
+                </div>
+                <div class="module-content" id="financeiro">
+                    <div class="table-list">
+                        <div class="table-item">
+                            <div class="table-name">financial_accounts</div>
+                            <div class="table-columns">Contas financeiras</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">financial_categories</div>
+                            <div class="table-columns">Categorias receitas/despesas</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">financial_transactions</div>
+                            <div class="table-columns">Transações financeiras</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">billing_periods</div>
+                            <div class="table-columns">Períodos de faturamento</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-header" onclick="toggleModule('cashback')">
+                    <h3>🎯 Cashback</h3>
+                    <div class="module-description">Sistema de cashback e programa de fidelidade</div>
+                </div>
+                <div class="module-content" id="cashback">
+                    <div class="table-list">
+                        <div class="table-item">
+                            <div class="table-name">cashback_rules</div>
+                            <div class="table-columns">Regras de cashback</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">cashback_credits</div>
+                            <div class="table-columns">Créditos de cashback</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">cashback_redemptions</div>
+                            <div class="table-columns">Resgates realizados</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">loyalty_program</div>
+                            <div class="table-columns">Programa de fidelidade</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">coupons</div>
+                            <div class="table-columns">Cupons de desconto</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="module-card">
+                <div class="module-header" onclick="toggleModule('perfil')">
+                    <h3>⚙️ Perfil Filial</h3>
+                    <div class="module-description">Configurações específicas por filial</div>
+                </div>
+                <div class="module-content" id="perfil">
+                    <div class="table-list">
+                        <div class="table-item">
+                            <div class="table-name">platform_company</div>
+                            <div class="table-columns">Dados da empresa para documentos</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">business_metrics</div>
+                            <div class="table-columns">Métricas de negócio</div>
+                        </div>
+                        <div class="table-item">
+                            <div class="table-name">daily_stats</div>
+                            <div class="table-columns">Estatísticas diárias</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Banco de Dados -->
+        <div id="database" class="content-section">
+            <div class="schema-viewer">
+                <h2>🗄️ Esquema do Banco de Dados</h2>
+                <input type="text" class="search-box" placeholder="🔍 Buscar tabela..." oninput="filterTables(this.value)">
+                
+                <div class="table-list" id="all-tables">
+                    <div class="table-item" data-table="audit_logs">
+                        <div class="table-name">audit_logs</div>
+                        <div class="table-columns">11 colunas: id, user_id, organization_id, action, resource_type, resource_id, old_values, new_values, ip_address, user_agent, timestamp</div>
+                    </div>
+                    <div class="table-item" data-table="benefit_usage">
+                        <div class="table-name">benefit_usage</div>
+                        <div class="table-columns">8 colunas: id, benefit_id, user_id, usage_date, validation_method, validation_data, status</div>
+                    </div>
+                    <div class="table-item" data-table="benefits">
+                        <div class="table-name">benefits</div>
+                        <div class="table-columns">20 colunas: id, company_id, title, description, category, benefit_type, discount_value, discount_type, max_usage_per_user, total_stock, used_stock, validation_type, validation_rules, terms_conditions, start_date, end_date, status, created_at, updated_at, created_by, approved_by, approved_at</div>
+                    </div>
+                    <div class="table-item" data-table="billing_periods">
+                        <div class="table-name">billing_periods</div>
+                        <div class="table-columns">10 colunas: id, gym_id, period_start, period_end, total_checkins, total_amount, status, calculated_at, paid_at, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="branches">
+                        <div class="table-name">branches</div>
+                        <div class="table-columns">15 colunas: id, company_id, name, code, cnpj, email, phone, address, city, state, postal_code, manager_id, is_active, settings, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="business_metrics">
+                        <div class="table-name">business_metrics</div>
+                        <div class="table-columns">10 colunas: id, organization_id, unit_id, metric_name, metric_value, metric_type, period_start, period_end, dimensions, calculated_at</div>
+                    </div>
+                    <div class="table-item" data-table="cashback_credits">
+                        <div class="table-name">cashback_credits</div>
+                        <div class="table-columns">9 colunas: id, client_id, rule_id, sale_id, earned_amount, status, expires_at, redeemed_at, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="cashback_redemptions">
+                        <div class="table-name">cashback_redemptions</div>
+                        <div class="table-columns">7 colunas: id, client_id, credit_ids, redeemed_amount, redemption_type, description, redeemed_at, created_by</div>
+                    </div>
+                    <div class="table-item" data-table="cashback_rules">
+                        <div class="table-name">cashback_rules</div>
+                        <div class="table-columns">11 colunas: id, name, type, percentage, fixed_amount, min_purchase_amount, max_cashback_amount, valid_from, valid_until, is_active, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="check_ins">
+                        <div class="table-name">check_ins</div>
+                        <div class="table-columns">8 colunas: id, client_id, gym_id, check_in_time, check_out_time, method, qr_code, notes, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="clients">
+                        <div class="table-name">clients</div>
+                        <div class="table-columns">15 colunas: id, person_id, branch_id, membership_number, plan_type, plan_start_date, plan_end_date, monthly_fee, payment_status, emergency_contact, health_info, preferences, is_active, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="companies">
+                        <div class="table-name">companies</div>
+                        <div class="table-columns">15 colunas: id, name, cnpj, trade_name, email, phone, website, logo_url, address, contact_person, status, created_at, updated_at, created_by, approved_by, approved_at</div>
+                    </div>
+                    <div class="table-item" data-table="company_access_log">
+                        <div class="table-name">company_access_log</div>
+                        <div class="table-columns">7 colunas: id, user_id, company_id, access_type, accessed_at, user_role, ip_address</div>
+                    </div>
+                    <div class="table-item" data-table="corporate_companies">
+                        <div class="table-name">corporate_companies</div>
+                        <div class="table-columns">13 colunas: id, name, cnpj, trade_name, email, phone, website, address, contact_person, status, created_by, approved_by, approved_at, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="corporate_employees">
+                        <div class="table-name">corporate_employees</div>
+                        <div class="table-columns">12 colunas: id, user_id, corporate_company_id, employee_number, department, position, hire_date, benefits_eligible, status, created_by, approved_by, approved_at, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="coupon_validations">
+                        <div class="table-name">coupon_validations</div>
+                        <div class="table-columns">7 colunas: id, coupon_id, validated_by, validated_at, validation_location, validation_notes, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="coupons">
+                        <div class="table-name">coupons</div>
+                        <div class="table-columns">12 colunas: id, code, benefit_id, user_id, partner_id, discount_amount, original_value, status, generated_at, used_at, validated_by, expiry_date, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="daily_stats">
+                        <div class="table-name">daily_stats</div>
+                        <div class="table-columns">9 colunas: id, organization_id, unit_id, stat_date, total_checkins, unique_visitors, new_members, revenue_cents, occupancy_rate, member_satisfaction, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="employees">
+                        <div class="table-name">employees</div>
+                        <div class="table-columns">10 colunas: id, person_id, branch_id, employee_code, position, department, salary, hire_date, is_active, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="evaluations">
+                        <div class="table-name">evaluations</div>
+                        <div class="table-columns">7 colunas: id, client_id, evaluation_type, evaluator_id, metrics, notes, evaluation_date, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="financial_accounts">
+                        <div class="table-name">financial_accounts</div>
+                        <div class="table-columns">9 colunas: id, branch_id, name, type, bank_name, account_number, balance, is_active, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="financial_categories">
+                        <div class="table-name">financial_categories</div>
+                        <div class="table-columns">6 colunas: id, name, type, parent_id, is_active, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="financial_transactions">
+                        <div class="table-name">financial_transactions</div>
+                        <div class="table-columns">11 colunas: id, account_id, category_id, type, amount, description, reference_id, transaction_date, processed_at, status, created_by, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="gyms">
+                        <div class="table-name">gyms</div>
+                        <div class="table-columns">11 colunas: id, branch_id, name, address, phone, email, facilities, operating_hours, capacity, is_active, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="loyalty_program">
+                        <div class="table-name">loyalty_program</div>
+                        <div class="table-columns">9 colunas: id, user_id, partner_id, total_spent, total_saved, points_earned, points_redeemed, tier_level, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="loyalty_transactions">
+                        <div class="table-name">loyalty_transactions</div>
+                        <div class="table-columns">8 colunas: id, loyalty_program_id, transaction_type, amount, points, description, coupon_id, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="member_checkins">
+                        <div class="table-name">member_checkins</div>
+                        <div class="table-columns">7 colunas: id, member_id, gym_id, checkin_time, checkout_time, duration_minutes, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="member_services">
+                        <div class="table-name">member_services</div>
+                        <div class="table-columns">8 colunas: id, member_id, service_name, service_type, price, status, start_date, end_date, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="members">
+                        <div class="table-name">members</div>
+                        <div class="table-columns">16 colunas: id, user_id, member_number, plan_type, status, join_date, expiry_date, qr_token, monthly_checkins_goal, current_month_checkins, cashback_balance, emergency_contact, created_at, updated_at, qr_token_expires_at, wix_plan</div>
+                    </div>
+                    <div class="table-item" data-table="memberships">
+                        <div class="table-name">memberships</div>
+                        <div class="table-columns">11 colunas: id, user_id, organization_id, unit_id, membership_number, plan_id, start_date, end_date, status, documents, emergency_contact, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="nutritional_assessments">
+                        <div class="table-name">nutritional_assessments</div>
+                        <div class="table-columns">13 colunas: id, user_id, nutritionist_id, unit_id, assessment_date, dietary_restrictions, food_preferences, meal_plan, caloric_needs, supplements, notes, next_assessment_date, status, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="organizations">
+                        <div class="table-name">organizations</div>
+                        <div class="table-columns">13 colunas: id, name, slug, document_number, email, phone, address, business_hours, logo_url, settings, timezone, status, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="people">
+                        <div class="table-name">people</div>
+                        <div class="table-columns">15 colunas: id, type, full_name, email, phone, cpf_cnpj, birth_date, gender, address, city, state, postal_code, notes, is_active, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="permissions">
+                        <div class="table-name">permissions</div>
+                        <div class="table-columns">6 colunas: id, module, action, role, is_allowed, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="physical_assessments">
+                        <div class="table-name">physical_assessments</div>
+                        <div class="table-columns">11 colunas: id, user_id, assessor_id, unit_id, assessment_date, measurements, photos, goals, recommendations, next_assessment_date, status, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="plans">
+                        <div class="table-name">plans</div>
+                        <div class="table-columns">8 colunas: id, name, type, duration_months, price, features, is_active, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="platform_company">
+                        <div class="table-name">platform_company</div>
+                        <div class="table-columns">20 colunas: id, company_name, trade_name, cnpj, ie, im, email, phone, website, logo_url, address, bank_info, email_settings, document_footer, document_header, primary_color, secondary_color, created_at, updated_at, created_by, updated_by</div>
+                    </div>
+                    <div class="table-item" data-table="pricing_rules">
+                        <div class="table-name">pricing_rules</div>
+                        <div class="table-columns">11 colunas: id, gym_id, rule_name, price_per_checkin, min_checkins, max_checkins, start_date, end_date, is_active, created_at, updated_at, created_by</div>
+                    </div>
+                    <div class="table-item" data-table="products">
+                        <div class="table-name">products</div>
+                        <div class="table-columns">14 colunas: id, organization_id, name, description, type, sku, price_cents, cost_cents, stock_quantity, min_stock_level, images, specifications, category, status, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="profiles">
+                        <div class="table-name">profiles</div>
+                        <div class="table-columns">17 colunas: id, full_name, avatar_url, phone, cpf, birth_date, address, emergency_contact, consents, created_at, updated_at, role, company_id, corporate_company_id, status, approved_by, approved_at, member_id</div>
+                    </div>
+                    <div class="table-item" data-table="proposals">
+                        <div class="table-name">proposals</div>
+                        <div class="table-columns">11 colunas: id, client_id, plan_id, proposal_date, valid_until, amount, discount_percentage, status, notes, created_by, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="sales">
+                        <div class="table-name">sales</div>
+                        <div class="table-columns">11 colunas: id, client_id, plan_id, employee_id, total_amount, discount_amount, final_amount, status, payment_method, sale_date, notes, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="suppliers">
+                        <div class="table-name">suppliers</div>
+                        <div class="table-columns">7 colunas: id, person_id, company_name, services, commission_rate, is_active, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="units">
+                        <div class="table-name">units</div>
+                        <div class="table-columns">15 colunas: id, organization_id, name, code, document_number, email, phone, address, coordinates, capacity, amenities, business_hours, manager_id, settings, status, created_at, updated_at</div>
+                    </div>
+                    <div class="table-item" data-table="user_roles">
+                        <div class="table-name">user_roles</div>
+                        <div class="table-columns">11 colunas: id, user_id, organization_id, unit_id, role, permissions, granted_by, granted_at, expires_at, status, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="wallet_tokens">
+                        <div class="table-name">wallet_tokens</div>
+                        <div class="table-columns">9 colunas: id, user_id, token, expires_at, used_at, ip_address, user_agent, status, created_at</div>
+                    </div>
+                    <div class="table-item" data-table="wix_sync_log">
+                        <div class="table-name">wix_sync_log</div>
+                        <div class="table-columns">9 colunas: id, sync_type, records_processed, records_success, records_failed, error_details, started_at, completed_at, status</div>
+                    </div>
+                    <div class="table-item" data-table="wix_users">
+                        <div class="table-name">wix_users</div>
+                        <div class="table-columns">10 colunas: id, wix_user_id, email, first_name, last_name, status, membership_status, subscription_data, last_sync, created_at, updated_at</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Funcionalidades -->
+        <div id="features" class="content-section">
+            <div class="schema-viewer">
+                <h2>⚡ Funcionalidades Principais</h2>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-title">🔐 Autenticação RBAC</div>
+                        <div class="feature-desc">Sistema completo de controle de acesso baseado em roles com permissões granulares por módulo</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">📱 PWA Support</div>
+                        <div class="feature-desc">Progressive Web App com funcionalidades offline e instalação em dispositivos móveis</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">📊 Dashboard Analytics</div>
+                        <div class="feature-desc">Painéis com métricas em tempo real, estatísticas diárias e relatórios de performance</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">🏃‍♂️ Check-in QR Code</div>
+                        <div class="feature-desc">Sistema de check-in com QR Code para academias e controle de frequência</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">💰 Sistema Financeiro</div>
+                        <div class="feature-desc">Gestão completa de transações, categorias, contas e conciliação bancária</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">🎯 Programa Cashback</div>
+                        <div class="feature-desc">Sistema de cashback com regras flexíveis, créditos e programa de fidelidade</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">📋 Avaliações Físicas</div>
+                        <div class="feature-desc">Módulo completo de avaliações físicas e nutricionais com acompanhamento</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">🏢 Multi-tenant</div>
+                        <div class="feature-desc">Suporte a múltiplas organizações e unidades com isolamento de dados</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">📄 Gestão de Documentos</div>
+                        <div class="feature-desc">Sistema de upload, armazenamento e gestão de documentos via Supabase Storage</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">🔄 Integração Wix</div>
+                        <div class="feature-desc">Sincronização automática com plataforma Wix para gestão unificada</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">📈 Relatórios Avançados</div>
+                        <div class="feature-desc">Geração de relatórios dinâmicos com filtros e exportação de dados</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">🔔 Notificações</div>
+                        <div class="feature-desc">Sistema de notificações em tempo real para eventos importantes</div>
+                    </div>
+                </div>
+
+                <h3>🛡️ Segurança e Compliance</h3>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-title">🔐 RLS (Row Level Security)</div>
+                        <div class="feature-desc">Políticas de segurança a nível de linha implementadas em todas as tabelas</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">📋 Auditoria Completa</div>
+                        <div class="feature-desc">Log detalhado de todas as ações com rastreamento de IP e user agent</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">🔒 Criptografia</div>
+                        <div class="feature-desc">Dados sensíveis criptografados e tokens seguros para acesso mobile</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">✅ LGPD Compliance</div>
+                        <div class="feature-desc">Sistema preparado para conformidade com LGPD e proteção de dados</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GitHub -->
+        <div id="github" class="content-section">
+            <div class="github-section">
+                <h2>🐙 Deployment e Repositório GitHub</h2>
+                <p>O sistema foi desenvolvido e está funcionando. Para enviar os arquivos para um repositório GitHub, você tem algumas opções:</p>
+                
+                <h3>📁 Estrutura dos Arquivos Desenvolvidos</h3>
+                <div class="code-block">
+app-lg/
+├── README.md
+├── package.json
+├── next.config.js
+├── tailwind.config.js
+├── tsconfig.json
+├── public/
+│   ├── favicon.ico
+│   ├── logo.png
+│   └── manifest.json
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx
+│   │   ├── page.tsx
+│   │   ├── globals.css
+│   │   ├── admin/
+│   │   ├── cadastros/
+│   │   ├── academias/
+│   │   ├── membros/
+│   │   ├── vendas/
+│   │   ├── financeiro/
+│   │   ├── cashback/
+│   │   └── perfil/
+│   ├── components/
+│   │   ├── ui/
+│   │   ├── layout/
+│   │   └── forms/
+│   ├── lib/
+│   │   ├── supabase.ts
+│   │   ├── auth.ts
+│   │   └── utils.ts
+│   ├── types/
+│   │   └── database.ts
+│   └── hooks/
+└── supabase/
+    ├── migrations/
+    ├── functions/
+    └── config.toml
+                </div>
+
+                <h3>🚀 Opções para GitHub</h3>
+                
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-title">1. Download Manual</div>
+                        <div class="feature-desc">Baixar os arquivos do projeto e fazer upload manual para o GitHub</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">2. GitHub CLI</div>
+                        <div class="feature-desc">Usar GitHub CLI para criar e fazer push do repositório diretamente</div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-title">3. Git Remote</div>
+                        <div class="feature-desc">Configurar o repositório local e conectar ao GitHub remoto</div>
+                    </div>
+                </div>
+
+                <h3>📝 Comandos para Setup do Repositório</h3>
+                <div class="code-block">
+# 1. Criar repositório no GitHub (via web ou CLI)
+gh repo create app-lg --public --description "Sistema APP LG - Gestão para Academias"
+
+# 2. Inicializar Git local (se necessário)
+git init
+git add .
+git commit -m "Initial commit: Sistema APP LG completo"
+
+# 3. Conectar ao repositório remoto
+git remote add origin https://github.com/seu-usuario/app-lg.git
+git branch -M main
+git push -u origin main
+                </div>
+
+                <h3>🔧 Variáveis de Ambiente Necessárias</h3>
+                <div class="code-block">
+# .env.local
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+                </div>
+
+                <a href="#" class="github-btn" onclick="createGitInstructions()">📋 Gerar Instruções Completas</a>
+                <a href="#" class="github-btn" onclick="exportProjectFiles()">📦 Preparar Arquivos para Export</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Update nav tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function toggleModule(moduleId) {
+            const content = document.getElementById(moduleId);
+            content.classList.toggle('active');
+        }
+
+        function filterTables(searchTerm) {
+            const tables = document.querySelectorAll('#all-tables .table-item');
+            const searchLower = searchTerm.toLowerCase();
+            
+            tables.forEach(table => {
+                const tableName = table.getAttribute('data-table').toLowerCase();
+                const tableText = table.textContent.toLowerCase();
+                
+                if (tableName.includes(searchLower) || tableText.includes(searchLower)) {
+                    table.style.display = 'block';
+                } else {
+                    table.style.display = 'none';
+                }
+            });
+        }
+
+        function createGitInstructions() {
+            const instructions = `
+# Instruções Completas para GitHub
+
+## 1. Preparação Local
+\`\`\`bash
+# Navegar para a pasta do projeto
+cd /caminho/para/seu/projeto
+
+# Inicializar repositório Git (se não existir)
+git init
+
+# Criar .gitignore
+echo "node_modules/
+.next/
+.env.local
+.env
+dist/
+build/" > .gitignore
+\`\`\`
+
+## 2. Criar Repositório no GitHub
+- Acesse github.com e clique em "New repository"
+- Nome: app-lg
+- Descrição: Sistema APP LG - Gestão para Academias
+- Configurar como público ou privado conforme necessário
+
+## 3. Conectar e Fazer Push
+\`\`\`bash
+# Adicionar arquivos
+git add .
+
+# Fazer commit inicial
+git commit -m "feat: Sistema APP LG completo com 8 módulos"
+
+# Conectar ao repositório remoto
+git remote add origin https://github.com/SEU_USUARIO/app-lg.git
+
+# Fazer push inicial
+git branch -M main
+git push -u origin main
+\`\`\`
+
+## 4. Configurar Deploy (Vercel)
+\`\`\`bash
+# Instalar Vercel CLI
+npm i -g vercel
+
+# Fazer deploy
+vercel --prod
+\`\`\`
+
+## 5. Variáveis de Ambiente
+Configurar no Vercel Dashboard:
+- NEXT_PUBLIC_SUPABASE_URL
+- NEXT_PUBLIC_SUPABASE_ANON_KEY
+- SUPABASE_SERVICE_ROLE_KEY
+            `;
+            
+            const blob = new Blob([instructions], { type: 'text/markdown' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'github-setup-instructions.md';
+            a.click();
+        }
+
+        function exportProjectFiles() {
+            alert('Para exportar os arquivos do projeto:\\n\\n1. Acesse o ambiente de desenvolvimento\\n2. Compacte a pasta do projeto\\n3. Baixe o arquivo ZIP\\n4. Extraia e faça upload para o GitHub\\n\\nOu use as instruções de Git fornecidas.');
+        }
+
+        // Initialize with overview section
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('overview');
+        });
+    </script>
+</body>
+</html>
